@@ -22,7 +22,6 @@ const axiosConfig = {
 
 // get all outages
 const getAllOutages = async (axiosInstance) => {
-  console.log(axiosInstance)
   const response = await axiosInstance.get('outages');
   d('outages response received')
   return response.data;
