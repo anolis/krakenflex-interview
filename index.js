@@ -1,9 +1,9 @@
+
 // import filesystem 
 const fs = require('fs');
 
 // import axios
 const axios = require('axios');
-
 
 //do this so we dont expose our api key in repo
 const API_KEY = fs.readFileSync('keys/api-key.txt', 'utf8');
@@ -19,11 +19,10 @@ const axiosConfig = {
   }
 }
 
-//create our axios instance
-const axiosInstance = axios.create(axiosConfig);
 
 // get all outages
-const getAllOutages = async () => {
+const getAllOutages = async (axiosInstance) => {
+  console.log(axiosInstance)
   const response = await axiosInstance.get('outages');
   d('outages response received')
   return response.data;
@@ -31,9 +30,10 @@ const getAllOutages = async () => {
 
 
 // get site info
-const getSiteInfo = async (siteId) => {
+const getSiteInfo = async (siteId, axiosInstance) => {
   const response = await axiosInstance.get(`site-info/${siteId}`);
   d('siteInfo response received')
+  d(response.data)
   return response.data;
 };
 
@@ -49,6 +49,7 @@ const filterOutages = (outages, siteInfo) => {
 
 // attach device names to outages and return the outages
 const attachDeviceNames = (outages,siteInfo) => {
+
   const outagesWithNames = outages.map(outage => {
     const device = siteInfo.devices.find(device => device.id === outage.id);
     return {
@@ -60,54 +61,65 @@ const attachDeviceNames = (outages,siteInfo) => {
 };
 
 // post outages to site
-const postSiteOutages = async (siteId, outages) => {
+const postSiteOutages = async (siteId, outages, axiosInstance) => {
   const response = await axiosInstance.post(`site-outages/${siteId}`, outages);
   d('postSiteOutages response received')
-  return response.data;
+  return response.status;
 };
 
 // main function
 const main = async () => {
   try {
+
+    //create our axios instance
+    const axiosInstance = axios.create(axiosConfig);
+
     const siteId = 'norwich-pear-tree';
-    const outages = await getAllOutages();
-    const siteInfo = await getSiteInfo(siteId);
+
+    //get all outages, site info, filter outages, attach device names, post outages
+    const outages = await getAllOutages(axiosInstance);
+    const siteInfo = await getSiteInfo(siteId, axiosInstance);
     const filteredOutages = filterOutages(outages, siteInfo);
     const outagesWithNames = attachDeviceNames(filteredOutages, siteInfo);
-    const result = await postSiteOutages(siteId, outagesWithNames);
-
-
+    const result = await postSiteOutages(siteId, outagesWithNames, axiosInstance);
+    
+    if(result !== 200) throw new Error('Error posting outages'); //if something very unexpected happens
+    
     //some debug output
     d(['outages', outages]);
     d(['siteInfo', siteInfo]);
     d(['filteredOutages', filteredOutages]);
     d(['outagesWithNames', outagesWithNames]);
     d(['Outages successfully posted:', result]);
-  } catch (error) {message
+  } catch (error) {
+    if(typeof error.response === 'undefined') {
+      console.error('Error processing outages: no error object defined');
+      return;
+    }
     console.error('Error processing outages:', error);
 
-    // switch (error.response.status) {
-    //   case 400:
-    //     message = "We cannot process your request because it doesn't match the required format."
-    //     break;
-    //   case 403:
-    //     message = "You do not have the required permissions to make this request."
-    //     break;
-    //   case 404:
-    //     message = "You have requested a resource that does not exist."
-    //     break;
-    //   case 429:
-    //     message = "You've exceeded your limit for your API key."
-    //     break;
-    //   case 500:
-    //     message = "An internal server error occurred."
-    //     break;
-    //   default:
-    //     message = "An error occurred while processing your request."
-    //     break;
-    // }
+    switch (error.response.status) {
+      case 400:
+        message = "We cannot process your request because it doesn't match the required format."
+        break;
+      case 403:
+        message = "You do not have the required permissions to make this request."
+        break;
+      case 404:
+        message = "You have requested a resource that does not exist."
+        break;
+      case 429:
+        message = "You've exceeded your limit for your API key."
+        break;
+      case 500:
+        message = "An internal server error occurred."
+        break;
+      default:
+        message = "An error occurred while processing your request."
+        break;
+    }
 
-    // console.error(message);
+    console.error(message);
 
   }
 };
@@ -119,3 +131,13 @@ function d(message) {
 }
 
 main();
+
+
+//export our functions for test suite
+module.exports = {
+  getAllOutages,
+  getSiteInfo,
+  filterOutages,
+  attachDeviceNames,
+  postSiteOutages,
+};
