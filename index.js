@@ -19,6 +19,11 @@ const axiosConfig = {
   }
 }
 
+if (API_KEY === '') {
+  console.error('Error: API key not found. Please add your API key to keys/api-key.txt');
+  return;
+}
+
 
 // get all outages
 const getAllOutages = async (axiosInstance) => {
