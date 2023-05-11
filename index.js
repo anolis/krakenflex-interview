@@ -106,7 +106,7 @@ const main = async () => {
     d(['outagesWithNames', outagesWithNames]);
     d(['Outages successfully posted:', result]);
   } catch (error) {
-
+    var message = "An error occurred while processing your request."
     if(typeof error !== "undefined"){
       if(
         typeof error.response !== 'undefined' 
@@ -137,8 +137,19 @@ const main = async () => {
         console.error(message);
         return
       }
-      
-      console.error('Error processing outages:', error);
+      switch (error.code) {
+        case 'ECONNABORTED':
+          message = "The request timed out."
+          break;
+        case 'ENOTFOUND': 
+          message = "The request failed due to a network error."
+          break;
+        case "ERR_INVALID_CHAR": 
+          message = error.message
+          break;
+      }
+      console.error('Error processing outages:', error.code);
+      return
     }
   } 
 };
