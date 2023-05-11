@@ -11,7 +11,10 @@ You may also run the program with debugging output enabled by prepending `DEBUG=
 
 ## Testing 
 this program can be tested by using jest
-simply run the command `npm test` 
+simply run the command 
+
+`npm test` 
+
 if this does not work it could be possible that jest is not installed some how. 
 run this command from within the repo root directory to install it
 `npm install --save-dev jest` 
