@@ -6,8 +6,10 @@ This is a small coding project to assess my skills as a backend engineer, it's b
 I have created this program mainly using axios as the request/response framework, other than that I have used Jest and raw js to achieve the goals herein.
 
 ## Installation
-the installation is fairly straightforward, using an up-to-date version of node/npm please use the `npm ci` command to install required dependencies
+the installation is fairly straightforward, using an up-to-date version of node/npm please use the `npm ci` command to install required dependencies.
+
 One more thing, they key file should be stored in the repo root in a folder titled "keys" and the file should be titled api-key.txt with the token on one line
+
 ## Using This Program
 You may run the program by running `node index.js` from the repo root
 You may also run the program with debugging output enabled by prepending `DEBUG=true` to the command like so `DEBUG=true node index.js`
