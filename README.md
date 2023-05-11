@@ -9,11 +9,9 @@ the installation is fairly straightforward, using an up-to-date version of node/
 You may run the program by running `node index.js` from the repo root
 You may also run the program with debugging output enabled by prepending `DEBUG=true` to the command like so `DEBUG=true node index.js`
 
-Or simply:
+TL;DR prod: `node index.js`
 
-`node index.js`
--- OR -- 
-`DEBUG=true node index.js`
+TL;DR debug: `DEBUG=true node index.js`
 
 ## Testing 
 this program can be tested by using jest
