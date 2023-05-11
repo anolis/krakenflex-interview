@@ -148,7 +148,7 @@ const main = async () => {
           message = error.message
           break;
       }
-      console.error('Error processing outages:', error.code);
+      console.error('Error processing outages:', message);
       return
     }
   } 
