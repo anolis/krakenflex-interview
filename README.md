@@ -7,6 +7,7 @@ I have created this program mainly using axios as the request/response framework
 
 ## Installation
 the installation is fairly straightforward, using an up-to-date version of node/npm please use the `npm ci` command to install required dependencies
+One more thing, they key file should be stored in the repo root in a folder titled "keys" and the file should be titled api-key.txt with the token on one line
 ## Using This Program
 You may run the program by running `node index.js` from the repo root
 You may also run the program with debugging output enabled by prepending `DEBUG=true` to the command like so `DEBUG=true node index.js`
@@ -24,3 +25,5 @@ simply run the command
 if this does not work it could be possible that jest is not installed some how. 
 run this command from within the repo root directory to install it
 `npm install --save-dev jest` 
+
+
