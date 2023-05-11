@@ -698,9 +698,9 @@ describe('getAllOutages', () => {
   it('should call axios with the correct parameters and return the data', async () => {
     const testData = outagesMock
   
-    axiosInstance.get = jest.fn().mockResolvedValue(testData);
+    axios.get = jest.fn().mockResolvedValue(testData);
 
-    const result = await getAllOutages(axiosInstance);
+    const result = await getAllOutages(axios);
 
     expect(result).toEqual(testData.data);
   });
@@ -711,9 +711,9 @@ describe('getSiteInfo', () => {
     const testData = siteInfoMock
     const siteId = 'norwich-pear-tree';
 
-    axiosInstance.get = jest.fn().mockResolvedValue(testData);
+    axios.get = jest.fn().mockResolvedValue(testData);
 
-    const result = await getSiteInfo(siteId, axiosInstance);
+    const result = await getSiteInfo(siteId, axios);
 
     expect(result).toEqual(testData.data);
   });
@@ -754,9 +754,9 @@ describe('postSiteOutages', () => {
       statusText: 'OK',
     }
 
-    axiosInstance.post = jest.fn().mockResolvedValue(mockResult);
+    axios.post = jest.fn().mockResolvedValue(mockResult);
 
-    const result = await postSiteOutages(siteId, outages, axiosInstance);
+    const result = await postSiteOutages(siteId, outages, axios);
 
     expect(result).toEqual(200);
   });
