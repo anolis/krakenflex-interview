@@ -8,7 +8,9 @@ the installation is fairly straightforward, using an up-to-date version of node/
 ## Using This Program
 You may run the program by running `node index.js` from the repo root
 You may also run the program with debugging output enabled by prepending `DEBUG=true` to the command like so `DEBUG=true node index.js`
+
 Or simply:
+
 `node index.js`
 -- OR -- 
 `DEBUG=true node index.js`
