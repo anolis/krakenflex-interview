@@ -14,6 +14,14 @@ const API_KEY = fs.readFileSync('keys/api-key.txt', 'utf8');
   console.error('Error: API key file not found. Please add your API key to keys/api-key.txt');
   return;
 }
+
+//make sure its not null`
+if (API_KEY === '') {
+  console.error('Error: API key is null. Please check your API key in keys/api-key.txt');
+  return;
+}
+
+
 //our api root endpoint
 const BASE_URL = 'https://api.krakenflex.systems/interview-tests-mock-api/v1/';
 
@@ -25,10 +33,6 @@ const axiosConfig = {
   }
 }
 
-if (API_KEY === '') {
-  console.error('Error: API key is null. Please check your API key in keys/api-key.txt');
-  return;
-}
 
 
 // get all outages
