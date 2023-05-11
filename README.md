@@ -1,7 +1,9 @@
 # KrakenFlex Backend Test Submission 
 
 ## Description
-This is a small coding project to assess my skills as a backend engineer, it's basic functionality is to request a list of outages, link them with a site id and subsequent devices associated with the site, also preliminarily filtering the outage set by site and time, after it has done this it posts the outage(s) to an endpoint for later consumption by the front-end assumedly.
+This is a small coding project to assess my skills as a backend engineer, it's basic functionality is to request a list of outages, link them with a site id and subsequent devices associated with the site, also preliminarily filtering the outage set by site and time, after it has done this it posts the outage(s) to an endpoint for later consumption by the front-end assumedly. 
+
+I have created this program mainly using axios as the request/response framework, other than that I have used Jest and raw js to achieve the goals herein.
 
 ## Installation
 the installation is fairly straightforward, using an up-to-date version of node/npm please use the `npm ci` command to install required dependencies
