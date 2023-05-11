@@ -28,4 +28,9 @@ if this does not work it could be possible that jest is not installed some how.
 run this command from within the repo root directory to install it
 `npm install --save-dev jest` 
 
+## Subsequent Thoughts and Considerations
+
+ - Could use command line options to generate/populate outage reports by siteId
+ - Could output json/csv/xls documents to further the reporting of these metrics
+ - Could add this to a cron schedule or work queue to automate these reports
 
