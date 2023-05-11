@@ -5,7 +5,7 @@ const fs = require('fs');
 // import axios
 const axios = require('axios');
 
-let API_KEY = ''; //our api key
+let API_KEY = ''; 
 
 try{
 //do this so we dont expose our api key in repo
@@ -106,36 +106,41 @@ const main = async () => {
     d(['outagesWithNames', outagesWithNames]);
     d(['Outages successfully posted:', result]);
   } catch (error) {
-    if(typeof error.response === 'undefined') {
-      console.error('Error processing outages: no error object defined');
-      return;
+
+    if(typeof error !== "undefined"){
+      if(
+        typeof error.response !== 'undefined' 
+        && typeof error.response.status !== 'undefined' 
+      ) {
+
+        switch (error.response.status) {
+          case 400:
+            message = "We cannot process your request because it doesn't match the required format."
+            break;
+          case 403:
+            message = "You do not have the required permissions to make this request."
+            break;
+          case 404:
+            message = "You have requested a resource that does not exist."
+            break;
+          case 429:
+            message = "You've exceeded your limit for your API key."
+            break;
+          case 500:
+            message = "An internal server error occurred."
+            break;
+          default:
+            message = "An error occurred while processing your request."
+            break;
+        }
+
+        console.error(message);
+        return
+      }
+      
+      console.error('Error processing outages:', error);
     }
-    console.error('Error processing outages:', error);
-
-    switch (error.response.status) {
-      case 400:
-        message = "We cannot process your request because it doesn't match the required format."
-        break;
-      case 403:
-        message = "You do not have the required permissions to make this request."
-        break;
-      case 404:
-        message = "You have requested a resource that does not exist."
-        break;
-      case 429:
-        message = "You've exceeded your limit for your API key."
-        break;
-      case 500:
-        message = "An internal server error occurred."
-        break;
-      default:
-        message = "An error occurred while processing your request."
-        break;
-    }
-
-    console.error(message);
-
-  }
+  } 
 };
 
 function d(message) {
