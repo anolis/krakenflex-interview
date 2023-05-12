@@ -34,6 +34,62 @@ const axiosConfig = {
 }
 
 
+// handle errors
+const handleErrors = (error) => {
+
+  //set a default generic message incase something even more unexpected than usual occurs :P
+  var message = "An error occurred while processing your request."
+  if(typeof error !== "undefined"){ //make sure our error object is actually defined
+    
+    //see if we are having an issue with the response from the server otherwise its a local issue
+    if(
+      typeof error.response !== 'undefined' 
+      && typeof error.response.status !== 'undefined' 
+    ) {
+
+      //handle general HTTP error codes
+      switch (error.response.status) {      
+        case 400:
+          message = "We cannot process your request because it doesn't match the required format."
+          break;
+        case 403:
+          message = "You do not have the required permissions to make this request."
+          break;
+        case 404:
+          message = "You have requested a resource that does not exist."
+          break;
+        case 429:
+          message = "You've exceeded your limit for your API key."
+          break;
+        case 500:
+          message = "An internal server error occurred."
+          break;
+        default:
+          message = "An error occurred while processing your request."
+          break;
+      }
+
+
+    //handle local errors
+    } else { 
+      switch (error.code) {
+        case 'ECONNABORTED': //the kernel/js runtime aborted the connection 
+          message = "The request timed out."
+          break;
+        case 'ENOTFOUND': //the kernel/js runtime could not find the host
+          message = "The request failed due to a network error."
+          break;
+        case "ERR_INVALID_CHAR": //an invalid character was found in the request
+          message = error.message //use the native meesage as it describes what exactly was wrong with a particular string
+          break;
+      }
+    }
+
+    //finally output our error message
+    console.error('Error processing outages:', message);
+    return
+  }
+}
 
 // get all outages
 const getAllOutages = async (axiosInstance) => {
@@ -106,51 +162,7 @@ const main = async () => {
     d(['outagesWithNames', outagesWithNames]);
     d(['Outages successfully posted:', result]);
   } catch (error) {
-    var message = "An error occurred while processing your request."
-    if(typeof error !== "undefined"){
-      if(
-        typeof error.response !== 'undefined' 
-        && typeof error.response.status !== 'undefined' 
-      ) {
-
-        switch (error.response.status) {
-          case 400:
-            message = "We cannot process your request because it doesn't match the required format."
-            break;
-          case 403:
-            message = "You do not have the required permissions to make this request."
-            break;
-          case 404:
-            message = "You have requested a resource that does not exist."
-            break;
-          case 429:
-            message = "You've exceeded your limit for your API key."
-            break;
-          case 500:
-            message = "An internal server error occurred."
-            break;
-          default:
-            message = "An error occurred while processing your request."
-            break;
-        }
-
-        console.error(message);
-        return
-      }
-      switch (error.code) {
-        case 'ECONNABORTED':
-          message = "The request timed out."
-          break;
-        case 'ENOTFOUND': 
-          message = "The request failed due to a network error."
-          break;
-        case "ERR_INVALID_CHAR": 
-          message = error.message
-          break;
-      }
-      console.error('Error processing outages:', message);
-      return
-    }
+    handleErrors(error);
   } 
 };
 
